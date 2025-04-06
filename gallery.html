@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gallery – Kyber Crystal Archive</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .gallery-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .search-bar {
+      width: 100%;
+      padding: 12px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 5px;
+      margin-bottom: 2rem;
+      box-shadow: 0 0 10px rgba(254, 218, 74, 0.2);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .gallery-item {
+      background-color: #111;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(254, 218, 74, 0.1);
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+
+    .gallery-item:hover {
+      transform: scale(1.03);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+    }
+
+    .gallery-item p {
+      margin-top: 0.5rem;
+      color: #feda4a;
+      font-weight: bold;
+    }
+
+    .loading {
+      text-align: center;
+      color: #777;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Gallery</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="submit.html">Submit</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="gallery-container">
+      <input
+        type="text"
+        class="search-bar"
+        id="searchInput"
+        placeholder="Search boxsets (e.g., 1345, hologram, blue crystal)..."
+      />
+
+      <div class="gallery-grid" id="gallery">
+        <!-- Images will load here -->
+      </div>
+      <div class="loading" id="loading">Loading more boxsets...</div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Kyber Crystal Archive</p>
+  </footer>
+
+  <script>
+    const gallery = document.getElementById("gallery");
+    const searchInput = document.getElementById("searchInput");
+    const loading = document.getElementById("loading");
+
+    // Create mock data for 3,000 boxsets
+    const boxsets = Array.from({ length: 3000 }, (_, i) => ({
+      id: i + 1,
+      title: `Boxset #${i + 1}`,
+      image: `https://via.placeholder.com/300x200?text=Boxset+${i + 1}`
+    }));
+
+    let filteredBoxsets = boxsets; // Holds filtered list
+    let itemsPerLoad = 50;
+    let currentIndex = 0;
+    let loadingMore = false;
+
+    // Render a chunk of boxsets
+    function loadBoxsetsChunk() {
+      if (loadingMore) return;
+      loadingMore = true;
+
+      const nextChunk = filteredBoxsets.slice(currentIndex, currentIndex + itemsPerLoad);
+      nextChunk.forEach(item => {
+        const box = document.createElement("div");
+        box.className = "gallery-item";
+        box.innerHTML = `
+          <img src="${item.image}" alt="${item.title}" loading="lazy" />
+          <p>${item.title}</p>
+        `;
+        gallery.appendChild(box);
+      });
+
+      currentIndex += itemsPerLoad;
+      loadingMore = false;
+
+      if (currentIndex >= filteredBoxsets.length) {
+        loading.style.display = "none";
+      }
+    }
+
+    // Real-time search
+    searchInput.addEventListener("input", (e) => {
+      const term = e.target.value.toLowerCase();
+      gallery.innerHTML = ""; // Clear current gallery
+      currentIndex = 0;
+
+      filteredBoxsets = boxsets.filter(b => b.title.toLowerCase().includes(term));
+      loading.style.display = filteredBoxsets.length > itemsPerLoad ? "block" : "none";
+      loadBoxsetsChunk();
+    });
+
+    // Infinite scroll trigger
+    window.addEventListener("scroll", () => {
+      const scrollTop = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const docHeight = document.documentElement.scrollHeight;
+
+      if (scrollTop + windowHeight >= docHeight - 100) {
+        loadBoxsetsChunk();
+      }
+    });
+
+    // Initial load
+    loadBoxsetsChunk();
+  </script>
+</body>
+</html>
