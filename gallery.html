@@ -128,80 +128,61 @@
     const gallery = document.getElementById("gallery");
     const searchInput = document.getElementById("searchInput");
     const loading = document.getElementById("loading");
-
-    // Create mock data for 3,000 boxsets with placeholder logic
-    const boxsets = Array.from({ length: 3000 }, (_, i) => ({
-      id: i + 1,
-      title: `Boxset #${i + 1}`,
-      image: "images/holocron-placeholder.png",
-      isPlaceholder: true, // Initially, all items are placeholders
-    }));
-
-    let filteredBoxsets = boxsets; // Holds filtered list
+  
     let itemsPerLoad = 50;
     let currentIndex = 0;
-    let loadingMore = false;
-
-    // Render a chunk of boxsets
+    let filteredBoxsets = [];
+    let allBoxsets = [];
+  
+    async function loadApprovedBoxsets() {
+      try {
+        const response = await fetch('approved-submissions.json');
+        allBoxsets = await response.json();
+  
+        filteredBoxsets = allBoxsets;
+        loadBoxsetsChunk();
+      } catch (err) {
+        console.error("Error loading approved boxsets:", err);
+        gallery.innerHTML = "<p style='color: red;'>Failed to load gallery.</p>";
+      }
+    }
+  
     function loadBoxsetsChunk() {
-      if (loadingMore) return;
-      loadingMore = true;
-
       const nextChunk = filteredBoxsets.slice(currentIndex, currentIndex + itemsPerLoad);
       nextChunk.forEach(item => {
         const box = document.createElement("div");
         box.className = "gallery-item";
-
-        if (item.isPlaceholder) {
-          // Placeholder image logic
-          box.classList.add("placeholder");
-          box.innerHTML = `
-            <img src="images/holocron-placeholder.png" alt="Placeholder for Boxset ${item.id}" loading="lazy" />
-            <p>${item.title}</p>
-          `;
-        } else {
-          // Real image logic (can be updated with actual image URLs)
-          box.innerHTML = `
-            <img src="${item.image}" alt="${item.title}" loading="lazy" />
-            <p>${item.title}</p>
-          `;
-        }
-
+        box.innerHTML = `
+          <img src="${item.displayImage}" alt="${item.title}" loading="lazy" />
+          <p>${item.title}</p>
+        `;
         gallery.appendChild(box);
       });
-
+  
       currentIndex += itemsPerLoad;
-      loadingMore = false;
-
       if (currentIndex >= filteredBoxsets.length) {
         loading.style.display = "none";
       }
     }
-
-    // Real-time search
+  
     searchInput.addEventListener("input", (e) => {
       const term = e.target.value.toLowerCase();
-      gallery.innerHTML = ""; // Clear current gallery
+      gallery.innerHTML = "";
       currentIndex = 0;
-
-      filteredBoxsets = boxsets.filter(b => b.title.toLowerCase().includes(term));
-      loading.style.display = filteredBoxsets.length > itemsPerLoad ? "block" : "none";
+      filteredBoxsets = allBoxsets.filter(b => 
+        b.title.toLowerCase().includes(term) || 
+        b.description.toLowerCase().includes(term)
+      );
       loadBoxsetsChunk();
     });
-
-    // Infinite scroll trigger
+  
     window.addEventListener("scroll", () => {
-      const scrollTop = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const docHeight = document.documentElement.scrollHeight;
-
-      if (scrollTop + windowHeight >= docHeight - 100) {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
         loadBoxsetsChunk();
       }
     });
-
-    // Initial load
-    loadBoxsetsChunk();
+  
+    loadApprovedBoxsets();
   </script>
 </body>
 </html>

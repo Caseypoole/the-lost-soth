@@ -1,0 +1,9 @@
+[
+    {
+      "id": 123,
+      "title": "Boxset #123",
+      "description": "Test Description - One of the rarest red crystals ever seen!",
+      "placardImage": "https://res.cloudinary.com/dnlkdunlx/image/upload/v1234567890/sample1.jpg",
+      "displayImage": "https://res.cloudinary.com/dnlkdunlx/image/upload/v1234567890/sample2.jpg"
+    }
+  ]
