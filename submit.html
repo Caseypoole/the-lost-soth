@@ -19,30 +19,25 @@
   </header>
 
   <main>
-    <form
-        action="https://formspree.io/f/xoveperp"
-        method="POST"
-        enctype="multipart/form-data"
-    >
-        <label for="boxsetId">Boxset ID:</label>
-        <input type="text" id="boxsetId" name="boxsetId" required />
+    <form id="submitForm">
+      <label for="boxsetId">Boxset ID:</label>
+      <input type="text" id="boxsetId" name="boxsetId" required />
     
-        <label for="boxsetImage">Boxset Image (Boxset Placard):</label>
-        <input type="file" id="boxsetImage" name="boxsetImage" accept="image/*" required />
+      <label for="description">Description:</label>
+      <textarea id="description" name="description" required></textarea>
     
-        <label for="displayImage">Display Image (Boxset Setup):</label>
-        <input type="file" id="displayImage" name="displayImage" accept="image/*" required />
+      <label for="boxsetImage">Boxset Placard Image:</label>
+      <input type="file" id="boxsetImage" accept="image/*" required />
     
-        <label for="description">Description of Your Boxset:</label>
-        <textarea id="description" name="description" required></textarea>
+      <label for="displayImage">Display Image:</label>
+      <input type="file" id="displayImage" accept="image/*" required />
     
-        <button type="submit">Submit</button>
+      <button type="submit">Submit</button>
     </form>
-      
-      <div id="confirmationMessage" style="display: none;">
-        Thank you for your submission! It will be reviewed and added to the gallery soon.
-      </div>
-    </section>
+    
+    <div id="confirmationMessage" style="display: none;">
+      Thank you for your submission! It will be reviewed and added to the gallery soon.
+    </div>
   </main>
 
   <footer>
@@ -52,72 +47,66 @@
   <script>
     const form = document.getElementById('submitForm');
     const confirmationMessage = document.getElementById('confirmationMessage');
-    
-    const GITHUB_API_URL = 'https://api.github.com';
-    const REPO_OWNER = 'your-username';
-    const REPO_NAME = 'your-repository';
-    const GITHUB_TOKEN = 'your-personal-access-token';  // Use your GitHub token here
+
+    const cloudName = 'dnlkdunlx';
+    const uploadPreset = 'kyberboxset';
+
+    async function uploadToCloudinary(file) {
+      const url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', uploadPreset);
+
+      const response = await fetch(url, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Image upload failed');
+      }
+
+      const data = await response.json();
+      return data.secure_url;
+    }
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const formData = new FormData(form);
-      const boxsetId = formData.get('boxsetId');
-      const description = formData.get('description');
-      const boxsetImageFile = formData.get('boxsetImage');
-      const displayImageFile = formData.get('displayImage');
-
-      // Upload images to GitHub
-      const uploadImage = async (file) => {
-        const formData = new FormData();
-        formData.append('file', file);
-        
-        const response = await fetch(`https://uploads.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/images/${file.name}`, {
-          method: 'PUT',
-          headers: {
-            'Authorization': `token ${GITHUB_TOKEN}`,
-          },
-          body: JSON.stringify({
-            message: `Upload ${file.name}`,
-            content: await file.arrayBuffer(), // You can base64 encode the file if necessary
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to upload image');
-        }
-
-        const data = await response.json();
-        return data.content.download_url; // This is the URL of the image on GitHub
-      };
+      const boxsetId = document.getElementById('boxsetId').value;
+      const description = document.getElementById('description').value;
+      const boxsetImage = document.getElementById('boxsetImage').files[0];
+      const displayImage = document.getElementById('displayImage').files[0];
 
       try {
-        // Upload the images
-        const boxsetImageUrl = await uploadImage(boxsetImageFile);
-        const displayImageUrl = await uploadImage(displayImageFile);
+        // Upload to Cloudinary
+        const placardUrl = await uploadToCloudinary(boxsetImage);
+        const displayUrl = await uploadToCloudinary(displayImage);
 
-        // Create a new GitHub issue
-        const issueResponse = await fetch(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/issues`, {
+        // Submit to Formspree
+        const formData = new FormData();
+        formData.append('boxsetId', boxsetId);
+        formData.append('description', description);
+        formData.append('placardImageUrl', placardUrl);
+        formData.append('displayImageUrl', displayUrl);
+
+        const response = await fetch('https://formspree.io/f/xoveperp', {
           method: 'POST',
+          body: formData,
           headers: {
-            'Authorization': `token ${GITHUB_TOKEN}`,
-            'Content-Type': 'application/json',
+            Accept: 'application/json',
           },
-          body: JSON.stringify({
-            title: `Boxset #${boxsetId}`,
-            body: `**Boxset ID:** ${boxsetId}\n**Description:** ${description}\n![Boxset Image](${boxsetImageUrl})\n![Display Image](${displayImageUrl})`,
-          }),
         });
 
-        if (issueResponse.ok) {
-          confirmationMessage.style.display = 'block';
+        if (response.ok) {
           form.reset();
+          confirmationMessage.style.display = 'block';
         } else {
-          alert('Error submitting your boxset');
+          alert('There was an issue submitting the form. Please try again.');
         }
       } catch (error) {
-        console.error('Error:', error);
-        alert('There was an error submitting your boxset. Please try again later.');
+        console.error(error);
+        alert('There was a problem uploading your images. Please try again.');
       }
     });
   </script>
