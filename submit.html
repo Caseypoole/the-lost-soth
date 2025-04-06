@@ -2,139 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Lost Secrets of the Holocron – Submit Your Boxset</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Lost Secrets of the Holocron</title>
   <link rel="stylesheet" href="style.css" />
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #121212;
-      color: #feda4a;
-      margin: 0;
-      padding: 0;
-    }
-
-    header {
-      background-color: #1e1e1e;
-      padding: 1rem;
-      text-align: center;
-    }
-
-    .page-title {
-      font-size: 2.5rem;
-      color: #feda4a;
-    }
-
-    .page-subtitle {
-      font-size: 1.25rem;
-      color: #feda4a;
-      margin-top: 0.5rem;
-    }
-
-    nav a {
-      color: #feda4a;
-      margin: 0 1rem;
-      text-decoration: none;
-      font-size: 1rem;
-    }
-
-    nav a:hover {
-      text-decoration: underline;
-    }
-
-    main {
-      padding: 2rem;
-      max-width: 800px;
-      margin: 0 auto;
-      background-color: #222;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .submit-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.5rem;
-    }
-
-    h2 {
-      font-size: 1.75rem;
-      text-align: center;
-      color: #feda4a;
-    }
-
-    form {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-
-    label {
-      font-size: 1rem;
-      color: #feda4a;
-      font-weight: bold;
-    }
-
-    input[type="text"],
-    input[type="file"],
-    textarea {
-      padding: 0.75rem;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: 1px solid #444;
-      background-color: #333;
-      color: #feda4a;
-    }
-
-    input[type="file"] {
-      cursor: pointer;
-    }
-
-    textarea {
-      resize: vertical;
-      height: 120px;
-    }
-
-    button {
-      background-color: #feda4a;
-      color: #121212;
-      padding: 1rem;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #e1c50c;
-    }
-
-    #confirmationMessage {
-      margin-top: 1rem;
-      color: #38c172;
-      font-size: 1rem;
-      text-align: center;
-    }
-
-    footer {
-      text-align: center;
-      color: #feda4a;
-      padding: 1rem;
-      background-color: #121212;
-    }
-
-    footer a {
-      color: #feda4a;
-      text-decoration: none;
-    }
-  </style>
 </head>
 <body>
   <header>
-    <h1 class="page-title">The Lost Secrets of the Holocron</h1>
+    <h1>The Lost Secrets of the Holocron</h1>
     <p class="page-subtitle">Submit - Share your Kyber Crystal boxset with the world!</p>
     <nav>
       <a href="index.html">Home</a>
@@ -145,7 +19,8 @@
   </header>
 
   <main>
-    <div class="submit-container">
+    <!-- Submit Form Section -->
+    <section class="submit">
       <h2>Submit Your Boxset Details</h2>
       <form id="submitForm" enctype="multipart/form-data">
         <label for="boxsetId">Boxset ID:</label>
@@ -165,7 +40,7 @@
       <div id="confirmationMessage" style="display: none;">
         Thank you for your submission! It will be reviewed and added to the gallery soon.
       </div>
-    </div>
+    </section>
   </main>
 
   <footer>
@@ -228,12 +103,7 @@
           },
           body: JSON.stringify({
             title: `Boxset #${boxsetId}`,
-            body: `
-              **Boxset ID:** ${boxsetId}
-              **Description:** ${description}
-              ![Boxset Image](${boxsetImageUrl})
-              ![Display Image](${displayImageUrl})
-            `,
+            body: `**Boxset ID:** ${boxsetId}\n**Description:** ${description}\n![Boxset Image](${boxsetImageUrl})\n![Display Image](${displayImageUrl})`,
           }),
         });
 
