@@ -129,7 +129,7 @@
     const searchInput = document.getElementById("searchInput");
     const loading = document.getElementById("loading");
   
-    let itemsPerLoad = 50;
+    const itemsPerLoad = 50;
     let currentIndex = 0;
     let allBoxsets = [];
     let filteredBoxsets = [];
@@ -137,7 +137,7 @@
     const totalBoxsets = 3000;
     const placeholders = [];
   
-    // Create placeholders
+    // Create all placeholders (but don't append yet)
     for (let i = 1; i <= totalBoxsets; i++) {
       const box = document.createElement("div");
       box.className = "gallery-item";
@@ -150,11 +150,10 @@
         <p>Boxset #${paddedId}</p>
       `;
   
-      gallery.appendChild(box);
       placeholders.push(box);
     }
   
-    // Load approved submissions
+    // Load approved submissions and overwrite placeholder content
     async function loadApprovedBoxsets() {
       try {
         const response = await fetch("approved-submissions.json");
@@ -162,10 +161,10 @@
   
         approvedBoxsets.forEach(item => {
           const id = parseInt(item.id);
-          const box = placeholders[id - 1]; // Array is 0-indexed
+          const box = placeholders[id - 1]; // Update placeholder at position
+          const paddedId = id.toString().padStart(4, "0");
   
           if (box) {
-            const paddedId = id.toString().padStart(4, "0");
             box.innerHTML = `
               <img src="${item.displayImage}" alt="${item.title}" loading="lazy" />
               <p>${item.title || `Boxset #${paddedId}`}</p>
@@ -173,27 +172,14 @@
           }
         });
   
-        allBoxsets = placeholders; // use full list for filtering
+        allBoxsets = placeholders;
         filteredBoxsets = placeholders;
       } catch (err) {
         console.error("Error loading approved boxsets:", err);
       }
     }
   
-    // Search function
-    searchInput.addEventListener("input", (e) => {
-      const term = e.target.value.toLowerCase();
-      gallery.innerHTML = "";
-      currentIndex = 0;
-  
-      filteredBoxsets = placeholders.filter(box => 
-        box.textContent.toLowerCase().includes(term)
-      );
-  
-      loadBoxsetsChunk();
-    });
-  
-    // Lazy-load scrolling
+    // Lazy-load display
     function loadBoxsetsChunk() {
       const nextChunk = filteredBoxsets.slice(currentIndex, currentIndex + itemsPerLoad);
       nextChunk.forEach(item => gallery.appendChild(item));
@@ -204,13 +190,27 @@
       }
     }
   
+    // Search functionality
+    searchInput.addEventListener("input", (e) => {
+      const term = e.target.value.toLowerCase();
+      gallery.innerHTML = "";
+      currentIndex = 0;
+  
+      filteredBoxsets = placeholders.filter(box =>
+        box.textContent.toLowerCase().includes(term)
+      );
+  
+      loadBoxsetsChunk();
+    });
+  
+    // Scroll for infinite loading
     window.addEventListener("scroll", () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
         loadBoxsetsChunk();
       }
     });
   
-    // Initial load
+    // Init
     loadApprovedBoxsets().then(loadBoxsetsChunk);
   </script>
 </body>
