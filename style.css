@@ -98,50 +98,47 @@ footer p {
 }
 
 .featured {
-    max-width: 1000px;
-    margin: 2rem auto;
-    padding: 1rem;
-  }
-  
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.featured-boxset {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  text-align: left;
+}
+
+.featured-img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(254, 218, 74, 0.5);
+  flex: 1 1 300px;
+}
+
+.boxset-info {
+  flex: 1 1 300px;
+  text-align: left;
+}
+
+/* Adds spacing between sections */
+section {
+  margin-bottom: 4rem;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
   .featured-boxset {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
-    text-align: left;
-  }
-  
-  .featured-img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(254, 218, 74, 0.5);
-    flex: 1 1 300px;
-  }
-  
-  .boxset-info {
-    flex: 1 1 300px;
-  }
-  
-  /* Mobile-first responsiveness */
-  @media (max-width: 768px) {
-    .featured-boxset {
-      flex-direction: column;
-      text-align: center;
-    }
-  
-    .boxset-info {
-      padding: 0 1rem;
-    }
+    flex-direction: column;
+    text-align: center;
   }
 
-  section {
-    margin-bottom: 4rem; /* Adds space between all sections */
+  .boxset-info {
+    text-align: center;
+    padding: 0 1rem;
   }
-  
-  @media (max-width: 768px) {
-    section {
-      margin-bottom: 3rem; /* Slightly less spacing on mobile if you want */
-    }
-  }
+}
