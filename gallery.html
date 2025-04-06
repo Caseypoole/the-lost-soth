@@ -131,50 +131,78 @@
   
     let itemsPerLoad = 50;
     let currentIndex = 0;
-    let filteredBoxsets = [];
     let allBoxsets = [];
+    let filteredBoxsets = [];
   
+    const totalBoxsets = 3000;
+    const placeholders = [];
+  
+    // Create placeholders
+    for (let i = 1; i <= totalBoxsets; i++) {
+      const box = document.createElement("div");
+      box.className = "gallery-item";
+      box.dataset.id = i;
+  
+      const paddedId = i.toString().padStart(4, "0");
+  
+      box.innerHTML = `
+        <img src="images/placeholder.jpg" alt="Boxset #${paddedId}" loading="lazy" />
+        <p>Boxset #${paddedId}</p>
+      `;
+  
+      gallery.appendChild(box);
+      placeholders.push(box);
+    }
+  
+    // Load approved submissions
     async function loadApprovedBoxsets() {
       try {
-        const response = await fetch('approved-submissions.json');
-        allBoxsets = await response.json();
+        const response = await fetch("approved-submissions.json");
+        const approvedBoxsets = await response.json();
   
-        filteredBoxsets = allBoxsets;
-        loadBoxsetsChunk();
+        approvedBoxsets.forEach(item => {
+          const id = parseInt(item.id);
+          const box = placeholders[id - 1]; // Array is 0-indexed
+  
+          if (box) {
+            const paddedId = id.toString().padStart(4, "0");
+            box.innerHTML = `
+              <img src="${item.displayImage}" alt="${item.title}" loading="lazy" />
+              <p>${item.title || `Boxset #${paddedId}`}</p>
+            `;
+          }
+        });
+  
+        allBoxsets = placeholders; // use full list for filtering
+        filteredBoxsets = placeholders;
       } catch (err) {
         console.error("Error loading approved boxsets:", err);
-        gallery.innerHTML = "<p style='color: red;'>Failed to load gallery.</p>";
       }
     }
   
-    function loadBoxsetsChunk() {
-      const nextChunk = filteredBoxsets.slice(currentIndex, currentIndex + itemsPerLoad);
-      nextChunk.forEach(item => {
-        const box = document.createElement("div");
-        box.className = "gallery-item";
-        box.innerHTML = `
-          <img src="${item.displayImage}" alt="${item.title}" loading="lazy" />
-          <p>${item.title}</p>
-        `;
-        gallery.appendChild(box);
-      });
-  
-      currentIndex += itemsPerLoad;
-      if (currentIndex >= filteredBoxsets.length) {
-        loading.style.display = "none";
-      }
-    }
-  
+    // Search function
     searchInput.addEventListener("input", (e) => {
       const term = e.target.value.toLowerCase();
       gallery.innerHTML = "";
       currentIndex = 0;
-      filteredBoxsets = allBoxsets.filter(b => 
-        b.title.toLowerCase().includes(term) || 
-        b.description.toLowerCase().includes(term)
+  
+      filteredBoxsets = placeholders.filter(box => 
+        box.textContent.toLowerCase().includes(term)
       );
+  
       loadBoxsetsChunk();
     });
+  
+    // Lazy-load scrolling
+    function loadBoxsetsChunk() {
+      const nextChunk = filteredBoxsets.slice(currentIndex, currentIndex + itemsPerLoad);
+      nextChunk.forEach(item => gallery.appendChild(item));
+      currentIndex += itemsPerLoad;
+  
+      if (currentIndex >= filteredBoxsets.length) {
+        loading.style.display = "none";
+      }
+    }
   
     window.addEventListener("scroll", () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
@@ -182,7 +210,8 @@
       }
     });
   
-    loadApprovedBoxsets();
+    // Initial load
+    loadApprovedBoxsets().then(loadBoxsetsChunk);
   </script>
 </body>
 </html>
