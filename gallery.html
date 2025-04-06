@@ -112,7 +112,11 @@
         id="searchInput"
         placeholder="Search boxsets (e.g., 1345, hologram, blue crystal)..."
       />
-
+      <!-- Toggle to show only approved submissions (hide placeholders) -->
+      <label style="display: block; margin-bottom: 1rem; color: #feda4a; font-weight: bold;">
+        <input type="checkbox" id="toggleApprovedOnly" style="margin-right: 8px;" />
+        Hide Placeholders
+      </label>
       <div class="gallery-grid" id="gallery">
         <!-- Images will load here -->
       </div>
@@ -128,6 +132,7 @@
     const gallery = document.getElementById("gallery");
     const searchInput = document.getElementById("searchInput");
     const loading = document.getElementById("loading");
+    const toggleApprovedOnly = document.getElementById("toggleApprovedOnly");
   
     const itemsPerLoad = 50;
     let currentIndex = 0;
@@ -136,11 +141,12 @@
   
     const totalBoxsets = 3000;
     const placeholders = [];
+    const approvedSet = new Set();
   
-    // Create all placeholders (but don't append yet)
+    // Create all placeholders
     for (let i = 1; i <= totalBoxsets; i++) {
       const box = document.createElement("div");
-      box.className = "gallery-item";
+      box.className = "gallery-item placeholder";
       box.dataset.id = i;
   
       const paddedId = i.toString().padStart(4, "0");
@@ -148,12 +154,12 @@
       box.innerHTML = `
         <img src="images/holocron-placeholder.png" alt="Boxset #${paddedId}" loading="lazy" />
         <p>Boxset #${paddedId}</p>
+        <p class="placeholder-text">Image not yet submitted.</p>
       `;
   
       placeholders.push(box);
     }
   
-    // Load approved submissions and overwrite placeholder content
     async function loadApprovedBoxsets() {
       try {
         const response = await fetch("approved-submissions.json");
@@ -161,10 +167,12 @@
   
         approvedBoxsets.forEach(item => {
           const id = parseInt(item.id);
-          const box = placeholders[id - 1]; // Update placeholder at position
+          const box = placeholders[id - 1];
           const paddedId = id.toString().padStart(4, "0");
+          approvedSet.add(id);
   
           if (box) {
+            box.classList.remove("placeholder");
             box.innerHTML = `
               <img src="${item.displayImage}" alt="${item.title}" loading="lazy" />
               <p>${item.title || `Boxset #${paddedId}`}</p>
@@ -173,13 +181,29 @@
         });
   
         allBoxsets = placeholders;
-        filteredBoxsets = placeholders;
+        applyFilters();
       } catch (err) {
         console.error("Error loading approved boxsets:", err);
       }
     }
   
-    // Lazy-load display
+    function applyFilters() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const approvedOnly = toggleApprovedOnly.checked;
+  
+      currentIndex = 0;
+      gallery.innerHTML = "";
+  
+      filteredBoxsets = allBoxsets.filter(box => {
+        const isPlaceholder = box.classList.contains("placeholder");
+        const matchesSearch = box.textContent.toLowerCase().includes(searchTerm);
+  
+        return matchesSearch && (!approvedOnly || !isPlaceholder);
+      });
+  
+      loadBoxsetsChunk();
+    }
+  
     function loadBoxsetsChunk() {
       const nextChunk = filteredBoxsets.slice(currentIndex, currentIndex + itemsPerLoad);
       nextChunk.forEach(item => gallery.appendChild(item));
@@ -187,31 +211,21 @@
   
       if (currentIndex >= filteredBoxsets.length) {
         loading.style.display = "none";
+      } else {
+        loading.style.display = "block";
       }
     }
   
-    // Search functionality
-    searchInput.addEventListener("input", (e) => {
-      const term = e.target.value.toLowerCase();
-      gallery.innerHTML = "";
-      currentIndex = 0;
+    searchInput.addEventListener("input", applyFilters);
+    toggleApprovedOnly.addEventListener("change", applyFilters);
   
-      filteredBoxsets = placeholders.filter(box =>
-        box.textContent.toLowerCase().includes(term)
-      );
-  
-      loadBoxsetsChunk();
-    });
-  
-    // Scroll for infinite loading
     window.addEventListener("scroll", () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
         loadBoxsetsChunk();
       }
     });
   
-    // Init
-    loadApprovedBoxsets().then(loadBoxsetsChunk);
+    loadApprovedBoxsets();
   </script>
 </body>
 </html>
