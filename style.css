@@ -142,3 +142,60 @@ section {
     padding: 0 1rem;
   }
 }
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;  /* Adjusted space between form elements */
+    align-items: center;
+    width: 100%;
+  }
+  
+  label {
+    font-size: 1.1rem;
+    color: #feda4a;
+    font-weight: bold;
+    align-self: flex-start;
+  }
+  
+  input[type="text"],
+  input[type="file"],
+  textarea {
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background-color: #333;
+    color: #feda4a;
+    width: 100%;
+    max-width: 500px;  /* Ensure inputs do not stretch too wide */
+  }
+  
+  textarea {
+    resize: vertical;
+    height: 120px;
+  }
+  
+  button {
+    background-color: #feda4a;
+    color: #121212;
+    padding: 1rem;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    max-width: 500px;  /* Ensure button does not stretch too wide */
+  }
+  
+  button:hover {
+    background-color: #e1c50c;
+  }
+  
+  #confirmationMessage {
+    margin-top: 1rem;
+    color: #38c172;
+    font-size: 1rem;
+    text-align: center;
+  }

@@ -25,18 +25,19 @@
       <form id="submitForm" enctype="multipart/form-data">
         <label for="boxsetId">Boxset ID:</label>
         <input type="text" id="boxsetId" name="boxsetId" required />
-
+      
         <label for="boxsetImage">Boxset Image (Boxset Placard):</label>
         <input type="file" id="boxsetImage" name="boxsetImage" accept="image/*" required />
-
+      
         <label for="displayImage">Display Image (Boxset Setup):</label>
         <input type="file" id="displayImage" name="displayImage" accept="image/*" required />
-
+      
         <label for="description">Description of Your Boxset:</label>
         <textarea id="description" name="description" required></textarea>
-
+      
         <button type="submit">Submit</button>
       </form>
+      
       <div id="confirmationMessage" style="display: none;">
         Thank you for your submission! It will be reviewed and added to the gallery soon.
       </div>
