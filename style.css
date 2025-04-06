@@ -146,7 +146,7 @@ section {
 form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;  /* Adjusted space between form elements */
+    gap: 1.5rem;
     align-items: center;
     width: 100%;
   }
@@ -155,7 +155,8 @@ form {
     font-size: 1.1rem;
     color: #feda4a;
     font-weight: bold;
-    align-self: flex-start;
+    width: 100%;  /* Ensure labels stretch to 100% of the container width */
+    text-align: center;  /* Center-align the label text */
   }
   
   input[type="text"],
