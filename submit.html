@@ -19,24 +19,29 @@
   </header>
 
   <main>
-    <!-- Submit Form Section -->
-    <section class="submit">
-      <h2>Submit Your Boxset Details</h2>
-      <form id="submitForm" enctype="multipart/form-data">
-        <label for="boxsetId">Boxset ID:</label>
-        <input type="text" id="boxsetId" name="boxsetId" required />
-      
-        <label for="boxsetImage">Boxset Image (Boxset Placard):</label>
-        <input type="file" id="boxsetImage" name="boxsetImage" accept="image/*" required />
-      
-        <label for="displayImage">Display Image (Boxset Setup):</label>
-        <input type="file" id="displayImage" name="displayImage" accept="image/*" required />
-      
-        <label for="description">Description of Your Boxset:</label>
-        <textarea id="description" name="description" required></textarea>
-      
+    <form
+        action="https://formspree.io/f/xoveperp"
+        method="POST"
+        enctype="multipart/form-data"
+    >
+        <label>
+        Boxset ID:
+        <input type="text" name="boxset-id" required>
+        </label>
+        <label>
+        Description:
+        <textarea name="description" required></textarea>
+        </label>
+        <label>
+        Boxset Placard Image:
+        <input type="file" name="placard-image" accept="image/*" required>
+        </label>
+        <label>
+        Boxset Display Image:
+        <input type="file" name="display-image" accept="image/*" required>
+        </label>
         <button type="submit">Submit</button>
-      </form>
+    </form>
       
       <div id="confirmationMessage" style="display: none;">
         Thank you for your submission! It will be reviewed and added to the gallery soon.
