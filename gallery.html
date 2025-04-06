@@ -53,6 +53,24 @@
       font-weight: bold;
     }
 
+    .placeholder {
+      position: relative;
+      text-align: center;
+      color: white;
+    }
+
+    .placeholder::after {
+      content: "Placeholder for Boxset #";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 18px;
+      font-weight: bold;
+      color: red;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    }
+
     .loading {
       text-align: center;
       color: #777;
@@ -95,11 +113,12 @@
     const searchInput = document.getElementById("searchInput");
     const loading = document.getElementById("loading");
 
-    // Create mock data for 3,000 boxsets
+    // Create mock data for 3,000 boxsets with placeholder logic
     const boxsets = Array.from({ length: 3000 }, (_, i) => ({
       id: i + 1,
       title: `Boxset #${i + 1}`,
-      image: `https://via.placeholder.com/300x200?text=Boxset+${i + 1}`
+      image: `https://via.placeholder.com/300x200?text=Boxset+${i + 1}`,
+      isPlaceholder: true, // Initially, all items are placeholders
     }));
 
     let filteredBoxsets = boxsets; // Holds filtered list
@@ -116,10 +135,22 @@
       nextChunk.forEach(item => {
         const box = document.createElement("div");
         box.className = "gallery-item";
-        box.innerHTML = `
-          <img src="${item.image}" alt="${item.title}" loading="lazy" />
-          <p>${item.title}</p>
-        `;
+
+        if (item.isPlaceholder) {
+          // Placeholder image logic
+          box.classList.add("placeholder");
+          box.innerHTML = `
+            <img src="https://via.placeholder.com/300x200?text=Placeholder+for+Boxset+${item.id}" alt="${item.title}" loading="lazy" />
+            <p>${item.title}</p>
+          `;
+        } else {
+          // Real image logic (can be updated with actual image URLs)
+          box.innerHTML = `
+            <img src="${item.image}" alt="${item.title}" loading="lazy" />
+            <p>${item.title}</p>
+          `;
+        }
+
         gallery.appendChild(box);
       });
 
