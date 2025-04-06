@@ -135,3 +135,13 @@ footer p {
       padding: 0 1rem;
     }
   }
+
+  section {
+    margin-bottom: 4rem; /* Adds space between all sections */
+  }
+  
+  @media (max-width: 768px) {
+    section {
+      margin-bottom: 3rem; /* Slightly less spacing on mobile if you want */
+    }
+  }
