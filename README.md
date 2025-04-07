@@ -29,10 +29,10 @@ Whether you’re safeguarding a blue kyber crystal or illuminating your shelf wi
 📸 Submitting Your Boxset
 Go to the Submit Page to upload an image and enter your display info. After review, your boxset may appear in the public Gallery. Please allow a few days for review and curation.
 
-🚧 Future Improvements
-*Submission confirmation feedback
-*Optional metadata tags
-*Pagination for better performance on mobile
+🚧 **Future Improvements**
+- Submission confirmation feedback
+- Optional metadata tags
+- Pagination for better performance on mobile
 
 ⚠️ Disclaimer
 This project is fan-made and not affiliated with Disney, Lucasfilm, or Star Wars. All trademarks and properties belong to their respective owners.
