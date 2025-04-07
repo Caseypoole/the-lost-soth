@@ -24,6 +24,8 @@ Whether you’re safeguarding a blue kyber crystal or illuminating your shelf wi
 ├── images/                 # Hosted images and placeholders
 ├── style.css               # Global styles
 └── README.md               # You're here
+```
+
 📸 Submitting Your Boxset
 Go to the Submit Page to upload an image and enter your display info. After review, your boxset may appear in the public Gallery. Please allow a few days for review and curation.
 
