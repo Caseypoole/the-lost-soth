@@ -1,33 +1,42 @@
-# the-lost-soth
-Galaxy's Edge Secrets of the Holocron Kyber Crystal Boxset Archive
-Welcome to the Galaxy's Edge Secrets of the Holocron Kyber Crystal Boxset Archive. This website is dedicated to fans of the limited edition Kyber Crystal boxset from Star Wars: Galaxy's Edge. The goal of this site is to create an organized collection of all 3,000 unique boxsets that were released, with a special focus on the displays, setups, and personal touches that fans have made with their boxsets.
+🛸 The Lost Secrets of the Holocron
+A static fan-built archive and registry for the Secrets of the Holocron limited edition collector boxset from Star Wars: Galaxy's Edge. Only 3,000 of these boxsets exist across the galaxy — this site aims to discover, catalog, and showcase them all.
 
-About the Project
-This project aims to document the details of each boxset and display, with a comprehensive archive that fans can explore. We encourage participants to share their own images of their Secrets of the Holocron displays and setups. The site will collect data about these boxsets, which will be verified and archived for future reference.
+🌌 About the Project
+The Lost Secrets of the Holocron is a passion project for collectors and fans of Star Wars lore. It's built as a static website hosted on GitHub Pages that allows users to submit images and info about their unique boxsets. Submissions are reviewed and then published to the public-facing gallery.
 
-Features
-Image Submissions: Fans can upload and share images of their boxsets and the way they display them. The submitted images will be reviewed and approved before being added to the gallery.
+Whether you’re safeguarding a blue kyber crystal or illuminating your shelf with Sith red — your Holocron has a story, and this is where it's told.
 
-Boxset Database: This website will archive information about the 3,000 individual boxsets, keeping track of their uniqueness and how they’ve been displayed.
+🧰 Tech Stack
+HTML5 & CSS3 – Core structure and styling
+JavaScript – Dynamic DOM manipulation, search, and infinite scroll
+GitHub Pages – Static site hosting
+Formspree – For handling form submissions
+Cloudinary – Image hosting for user-submitted content
+JSON – Approved submissions stored in approved-submissions.json
 
-User Engagement: Fans can submit their own stories or descriptions about their boxsets to further enrich the archive.
+📁 Folder Structure
+bash
+Copy
+Edit
+├── index.html                 # Homepage
+├── about.html                 # Project overview and lore
+├── submit.html                # Submission form
+├── gallery.html               # Interactive archive of boxsets
+├── approved-submissions.json  # Reviewed & accepted entries
+├── images/                    # Placeholder Images
+├── style.css                  # Global styles
+└── README.md                  # You're here
+📸 Submitting Your Boxset
+Go to the Submit Page to upload an image and enter your display info. After review, your boxset may appear in the public Gallery. Please allow a few days for review and curation.
 
-How It Works
-Submit Images: To add your own boxset to the archive, fill out the form and submit images of your boxset and display setup.
+🚧 Future Improvements
+Submission confirmation feedback
+Optional metadata tags for location/display type
+Filtering by crystal color or boxset number
+Pagination for better performance on mobile
 
-Review Process: After submission, images will be reviewed for approval and added to the site once they meet the criteria.
+⚠️ Disclaimer
+This project is fan-made and not affiliated with Disney, Lucasfilm, or Star Wars. All trademarks and properties belong to their respective owners.
 
-Explore the Archive: Browse the archive to see other fans' setups, find inspiration, and learn more about the limited edition Kyber Crystal boxsets.
-
-Technologies Used
-Frontend: GitHub Pages is to host the site and provide static page support.
-
-Form Submission: A form-based submission system allows users to send in their images.
-
-HTML/CSS: The site is styled using custom CSS to ensure a clean and attractive user experience.
-
-Contributing
-This site is designed to be a community-driven project. Fans of the Galaxy's Edge Secrets of the Holocron Kyber Crystal boxsets are encouraged to contribute by submitting their own images and stories. Please make sure your submissions are appropriate and follow the submission guidelines provided.
-
-Contact
-If you have any questions or need help with your submission, feel free to reach out via caseypoole@gmail.com.
+⭐️ Contribute
+Found a bug or have an idea? Feel free to open an issue or submit a PR. May the Force be with you.
