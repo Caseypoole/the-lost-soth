@@ -97,6 +97,13 @@ footer p {
   font-size: 0.9rem;
 }
 
+.page-subtitle {
+    text-align: center;
+    font-size: 1.25rem;
+    color: #777;
+    margin-top: 0.5rem;
+  }
+
 .featured {
   max-width: 1000px;
   margin: 2rem auto;
